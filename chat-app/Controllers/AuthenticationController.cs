@@ -45,6 +45,5 @@ namespace chat_app.Controllers
 
         }
 
-
     }
 }
