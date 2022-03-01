@@ -1,5 +1,7 @@
 using Chat_App_DAL;
+using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
+using Chat_App_DAL.Repositories;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +14,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // add DB context to services and configure it to use our connection string with Npgsql
 builder.Services.AddDbContext<ChatAppDbContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("ChatAppDb"))
     );
 
+// Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+//builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
+
+
 builder.Services.AddMvc();
 
-// for us in production
+// for use in production
 builder.Services.AddSpaStaticFiles(configuration =>
 {
     configuration.RootPath = "frontend/build";
@@ -35,31 +44,38 @@ var app = builder.Build();
 // ********
 
 
-
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseSpa(spa =>
-//{
-//    spa.Options.SourcePath = "frontend";
-//    if (env.IsDevelopment())
-//    {
-//        spa.UseReactDevelopmentServer(npmScript: "start");
-//    }
-//});
-
 app.UseHttpsRedirection();
 
 // enable resources to accept JWT
 app.UseAuthentication();
 
+app.UseSpaStaticFiles();
+
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+//app.UseSpa(spa =>
+//{
+//    spa.Options.SourcePath = "chat-app-frontend";
+//    if (app.Environment.IsDevelopment())
+//    {
+//        app.UseDeveloperExceptionPage();
+//        spa.UseReactDevelopmentServer(npmScript: "start");
+//    }
+//});
 
 
 // **********

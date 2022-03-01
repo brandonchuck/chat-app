@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chat_App_DAL.Interfaces;
+using Chat_App_DAL.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace chat_app.Controllers
 {
 
-    [ApiController]
     [Route("api/auth")]
+    [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        private readonly IUserRepository _userRepository;
+        public AuthenticationController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
         /// <summary>
         /// - Returns a JWT to client if username and password exist
         /// - Redirect user to /chatrooms endpoint on frontend
@@ -17,16 +25,12 @@ namespace chat_app.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
+        [Route("login")]
         [HttpPost]
-        public void Login([FromBody] string username, [FromBody] string password)
+        public async Task<List<User>> Login([FromBody] User user)
         {
-            // 1. Check if user exists in the database
-                // use repository method to grab user by username (SELECT username FROM users WHERE username = username)
-            // 2. Return JWT if username and password match
-            
-            // if user exists, then make sure the password matches database
-                // SELECT password FROM USERS where username = username
-                // if username = username_query then log user in
+            var users = await _userRepository.GetAllUsersAsync();
+            return users;
         }
 
 
@@ -39,11 +43,25 @@ namespace chat_app.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
+        [Route("signup")]
         [HttpPost]
-        public void Signup([FromBody] string username, [FromBody] string password)
+        public async Task<User> Signup([FromBody] User user)
         {
+            var newUser = await _userRepository.CreateNewUserAsync(user);
+            return newUser;
+            // 1. Pass username & password in JSON body
+            // 2. Create the user in the database
+            // 3. Confirm that user has been created
 
         }
 
     }
 }
+            // login method
+            // 1. Check if user exists in the database
+                // use repository method to grab user by username (SELECT username FROM users WHERE username = username)
+            // 2. Return JWT if username and password match
+            
+            // if user exists, then make sure the password matches database
+                // SELECT password FROM USERS where username = username
+                // if username = username_query then log user in

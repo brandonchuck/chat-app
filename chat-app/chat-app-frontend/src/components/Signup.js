@@ -1,4 +1,4 @@
-import { React, useState, useRef, Form } from "react";
+import React, { useState, useRef, Form } from "react";
 import axios from "axios";
 
 // accept firstname, lastname, username, password
@@ -48,8 +48,8 @@ const Signup = () => {
 
   // TODO: render this HTML in side of the modal
   return (
-    <Form type="submit">
-      <label htmlfFor="firstName">First Name:</label>
+    <form type="submit">
+      <label htmlFor="firstName">First Name:</label>
       <input
         type="text"
         id="firstName"
@@ -58,7 +58,7 @@ const Signup = () => {
         // onChange={(e) => setFirstName(e.target.value)}
       />
 
-      <label htmlfFor="lastName">Last Name:</label>
+      <label htmlFor="lastName">Last Name:</label>
       <input
         type="text"
         id="lastName"
@@ -67,7 +67,7 @@ const Signup = () => {
         // onChange={(e) => setLastName(e.target.value)}
       />
 
-      <label htmlfFor="userName">Username:</label>
+      <label htmlFor="userName">Username:</label>
       <input
         type="text"
         id="userName"
@@ -76,7 +76,7 @@ const Signup = () => {
         // onChange={(e) => setUsername(e.target.value)}
       />
 
-      <label htmlfFor="password">Password:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
         id="password"
@@ -85,7 +85,7 @@ const Signup = () => {
         // onChange={(e) => setPassword(e.target.value)}
       />
 
-      <label htmlfFor="password-match">Re-enter Password:</label>
+      <label htmlFor="password-match">Re-enter Password:</label>
       <input
         type="password"
         id="password-match"
@@ -97,11 +97,11 @@ const Signup = () => {
       <button
         type="submit"
         onClick={(e) => handleRegister(e)}
-        disabled={password != passwordMatch}
+        disabled={password !== passwordMatch}
       >
         Register
       </button>
-    </Form>
+    </form>
   );
 };
 

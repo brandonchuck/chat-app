@@ -1,6 +1,5 @@
-import { React, useState, useRef, Form } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 // import { BrowserRouter as Router, Routes, Routem useHistory } from "react-router-dom";
 
 const Login = () => {
@@ -39,8 +38,8 @@ const Login = () => {
 
   return (
     <>
-      <Form type="submit">
-        <label htmlfFor="userName">Username:</label>
+      <form type="submit">
+        <label htmlFor="userName">Username:</label>
         <input
           type="text"
           id="userName"
@@ -49,7 +48,7 @@ const Login = () => {
           // onChange={(e) => setUsername(e.target.value)}
         />
 
-        <label htmlfFor="password">Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           id="password"
@@ -60,10 +59,10 @@ const Login = () => {
         <button type="submit" onClick={(e) => handleLogin(e)}>
           Login
         </button>
-      </Form>
+      </form>
       {/* make this have a pop-up modal for signing up */}
       <h3>
-        Don't have an acount? <Link href="/signup">Signup</Link>
+        Don't have an acount? <a href="/signup">Signup</a>
       </h3>
     </>
   );
