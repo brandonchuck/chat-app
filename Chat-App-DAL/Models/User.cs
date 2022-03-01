@@ -17,10 +17,16 @@ namespace Chat_App_DAL.Models
         [Required]
         [Column("password")]
         public string Password { get; set; }
+
+        [Column("first_name")]
+        public string FirstName { get; set; }
+
+        [Column("last_name")]
+        public string LastName { get; set; }
     }
 
 
-    
+
 
 
 

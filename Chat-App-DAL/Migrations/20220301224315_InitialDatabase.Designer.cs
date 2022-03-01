@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Chat_App_DAL.Migrations
 {
     [DbContext(typeof(ChatAppDbContext))]
-    [Migration("20220218070200_InitialDatabase")]
+    [Migration("20220301224315_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,15 +48,22 @@ namespace Chat_App_DAL.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("message_id");
 
-                    b.Property<Guid>("ChannelId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("channel_id");
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                    b.Property<Guid>("channel_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
 
                     b.HasKey("MessageId");
+
+                    b.HasIndex("channel_id");
+
+                    b.HasIndex("user_id");
 
                     b.ToTable("Messages");
                 });
@@ -67,6 +74,16 @@ namespace Chat_App_DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -81,6 +98,25 @@ namespace Chat_App_DAL.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Chat_App_DAL.Models.Message", b =>
+                {
+                    b.HasOne("Chat_App_DAL.Models.Channel", "Channel")
+                        .WithMany()
+                        .HasForeignKey("channel_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chat_App_DAL.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,10 +27,29 @@ namespace chat_app.Controllers
         /// <param name="password"></param>
         [Route("login")]
         [HttpPost]
-        public async Task<List<User>> Login([FromBody] User user)
+        public async Task<User> Login([FromQuery] string username, [FromQuery] string password)
         {
-            var users = await _userRepository.GetAllUsersAsync();
-            return users;
+            // TODO:
+            // 1. Grab password from JSON body
+            // 2. Grab hash from database
+            // 3. Extract salt from the hash stored in the database
+            // 4. Concatentate this salt with the provided password
+            // 5. Apply hashing algo to this string
+            // 6. Concatenate the salt to this new hash
+            // 7. Compare this new hash to the one stored in database
+            // 8. Return true or false
+
+            User currentUser = await _userRepository.GetUserByUsernameAsync(username);
+
+            bool isValidCredentials = BCrypt.Net.BCrypt.Verify(password, currentUser.Password);
+
+            if (isValidCredentials)
+            {
+                return currentUser;
+            } else
+            {
+                return null;
+            }
         }
 
 
@@ -45,13 +64,20 @@ namespace chat_app.Controllers
         /// <param name="password"></param>
         [Route("signup")]
         [HttpPost]
-        public async Task<User> Signup([FromBody] User user)
+        public async Task<User> Signup([FromBody] User user) // possibly create a UserDTO to grab firstname, lastname, username, password
         {
+            // TODO:
+            // 1. Generate Salt
+            // 2. Grab password from JSON body
+            // 3. Concatenate salt and password
+            // 4. Run this salt+password string through hashing algo
+            // 5. Concatentate original salt to this hash
+            // 6. Store this as the password in database
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password); // this hash has the salt appended to it
+            user.Password = passwordHash;
             var newUser = await _userRepository.CreateNewUserAsync(user);
             return newUser;
-            // 1. Pass username & password in JSON body
-            // 2. Create the user in the database
-            // 3. Confirm that user has been created
 
         }
 

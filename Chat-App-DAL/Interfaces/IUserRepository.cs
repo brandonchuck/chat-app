@@ -11,7 +11,9 @@ namespace Chat_App_DAL.Interfaces
     {
         Task<User> CreateNewUserAsync(User user);
         Task<User> GetUserByIdAsync(Guid id);
-        Task<List<User>> GetAllUsersAsync();
 
+        Task<User> GetUserByUsernameAsync(string name);
+
+        Task<List<User>> GetAllUsersAsync();
     }
 }
