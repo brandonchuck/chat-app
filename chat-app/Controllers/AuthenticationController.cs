@@ -1,6 +1,10 @@
 ﻿using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace chat_app.Controllers
 {
@@ -10,9 +14,11 @@ namespace chat_app.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        public AuthenticationController(IUserRepository userRepository)
+        private readonly IAuthenticationService _authenticationService;
+        public AuthenticationController(IUserRepository userRepository, IAuthenticationService authenticationService)
         {
             _userRepository = userRepository;
+            _authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -25,33 +31,28 @@ namespace chat_app.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        [Route("login")]
-        [HttpPost]
-        public async Task<User> Login([FromQuery] string username, [FromQuery] string password)
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login([FromBody] UserDTO userDTO)
         {
-            // TODO:
-            // 1. Grab password from JSON body
-            // 2. Grab hash from database
-            // 3. Extract salt from the hash stored in the database
-            // 4. Concatentate this salt with the provided password
-            // 5. Apply hashing algo to this string
-            // 6. Concatenate the salt to this new hash
-            // 7. Compare this new hash to the one stored in database
-            // 8. Return true or false
-
-            User currentUser = await _userRepository.GetUserByUsernameAsync(username);
-
-            bool isValidCredentials = BCrypt.Net.BCrypt.Verify(password, currentUser.Password);
-
-            if (isValidCredentials)
+            // create method that locates the User object in db and returns it by username
+            User currentUser = await _userRepository.GetUserByUsernameAsync(userDTO.Username);
+            if (currentUser == null)
             {
-                return currentUser;
-            } else
-            {
-                return null;
+                return BadRequest("User not found");
             }
-        }
 
+            // create method that validates the password and returns true or false
+            // determine if password hash matches password hash stored in db
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(userDTO.Password, currentUser.Password);
+            if (!isValidPassword)
+            {
+                return BadRequest("Wrong password");
+            }
+
+            // generate new jwt
+            string jwtToken = _authenticationService.GenerateToken(currentUser);
+            return Ok(jwtToken);
+        }
 
 
         /// <summary>
@@ -62,8 +63,7 @@ namespace chat_app.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        [Route("signup")]
-        [HttpPost]
+        [HttpPost("signup")]
         public async Task<User> Signup([FromBody] User user) // possibly create a UserDTO to grab firstname, lastname, username, password
         {
             // TODO:
@@ -78,16 +78,7 @@ namespace chat_app.Controllers
             user.Password = passwordHash;
             var newUser = await _userRepository.CreateNewUserAsync(user);
             return newUser;
-
         }
 
     }
 }
-            // login method
-            // 1. Check if user exists in the database
-                // use repository method to grab user by username (SELECT username FROM users WHERE username = username)
-            // 2. Return JWT if username and password match
-            
-            // if user exists, then make sure the password matches database
-                // SELECT password FROM USERS where username = username
-                // if username = username_query then log user in

@@ -1,4 +1,5 @@
-using Chat_App_DAL;
+using chat_app.Controllers;
+using chat_app.Services;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Chat_App_DAL.Repositories;
@@ -14,7 +15,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 // add DB context to services and configure it to use our connection string with Npgsql
 builder.Services.AddDbContext<ChatAppDbContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("ChatAppDb"))
@@ -25,6 +25,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 //builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
 
+// Services
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddMvc();
 
@@ -35,13 +37,7 @@ builder.Services.AddSpaStaticFiles(configuration =>
 });
 
 
-// ********
-
-
 var app = builder.Build();
-
-
-// ********
 
 
 //Configure the HTTP request pipeline.
@@ -53,13 +49,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// enable resources to accept JWT
 app.UseAuthentication();
 
 app.UseSpaStaticFiles();
 
 app.UseRouting();
 
+// enable resources to accept JWT
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -76,9 +72,6 @@ app.UseEndpoints(endpoints =>
 //        spa.UseReactDevelopmentServer(npmScript: "start");
 //    }
 //});
-
-
-// **********
 
 app.Run();
 
