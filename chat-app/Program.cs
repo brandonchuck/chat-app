@@ -22,8 +22,8 @@ builder.Services.AddDbContext<ChatAppDbContext>(
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-//builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
 
 // Services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();

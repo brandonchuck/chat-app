@@ -28,7 +28,7 @@ namespace Chat_App_DAL.Repositories
         // Get all User's in table
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _chatAppDbContext.Users.ToListAsync<User>(); // return a list of all User objects within DbSet
+            return await _chatAppDbContext.Users.ToListAsync(); // return a list of all User objects within DbSet
         }
 
         // Get User by user_id

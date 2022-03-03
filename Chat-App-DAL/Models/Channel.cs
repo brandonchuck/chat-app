@@ -12,7 +12,7 @@ namespace Chat_App_DAL.Models
     {
         [Key]
         [Column("channel_id")]
-        public Guid ChannelId { get; set; }
+        public Guid ChannelId { get; private set; }
 
         [Required]
         [Column("channel_name")]

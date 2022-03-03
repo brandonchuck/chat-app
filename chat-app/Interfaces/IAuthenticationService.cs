@@ -5,6 +5,9 @@ namespace chat_app.Controllers
 {
     public interface IAuthenticationService
     {
-        public string GenerateToken(User user);
+        public string GenerateAuthToken(User user);
+        public Task<User> AuthenticateUser(string username);
+        public bool ValidatePassword(string formPassword, string dbPassword);
+
     }
 }
