@@ -15,14 +15,18 @@ namespace chat_app.Controllers
             _messageRepository = messageRepository;
         }
 
-        [HttpGet]
-        public ActionResult<List<Message>> GetUserMessagesById(Guid user_id)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<List<Message>>> GetUserMessagesById([FromRoute] int userId)
         {
-            var userMessages =  _messageRepository.GetUserMessagesByIdAsync(user_id);
+            var userMessages = await _messageRepository.GetUserMessagesByIdAsync(userId);
             return Ok(userMessages);
-        }  
+        }
 
-
-
+        //[HttpPost("{channelName}/create")]
+        //public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromHeader] int userId, [FromBody] string text)
+        //{
+        //    var message = await _messageRepository.CreateChannelMessage(channelName, userId, text);
+        //    return Ok(message);
+        //}
     }
 }

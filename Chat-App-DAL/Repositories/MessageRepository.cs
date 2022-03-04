@@ -18,14 +18,18 @@ namespace Chat_App_DAL.Repositories
             _chatAppDbContext = chatAppDbContext;
         }
 
-        public async Task<List<Message>> GetUserMessagesByIdAsync(Guid user_id)
+        public async Task<List<Message>> GetUserMessagesByIdAsync(int user_id)
         {
             return await _chatAppDbContext.Messages.Where(m => m.User.UserId == user_id).ToListAsync();
         }
 
-        //public async Task<Message> CreateChannelMessage(string channelName)
+        //public async Task<Message> CreateChannelMessage(string channelName, int userId, string text)
         //{
-
+        //    var channelId = _chatAppDbContext.Channels.Where(c => c.ChannelName == channelName).FirstOrDefault().ChannelId;
+        //    Message message = new Message(userId, text, channelId);
+        //    _chatAppDbContext.Messages.Add(message);
+        //    await _chatAppDbContext.SaveChangesAsync();
+        //    return message;
         //}
     }
 }

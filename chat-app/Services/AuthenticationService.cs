@@ -19,16 +19,22 @@ namespace chat_app.Services
             _userRepository = userRepository;
         }
 
+
+        // Verify User
         public async Task<User> AuthenticateUser(string username)
         {
             return await _userRepository.GetUserByUsernameAsync(username);
         }
 
+
+        // Verify Password
         public bool ValidatePassword(string formPassword, string dbPassword)
         {
             return BCrypt.Net.BCrypt.Verify(formPassword, dbPassword);
         }
 
+
+        // Generate JWT
         public string GenerateAuthToken(User user)
         {
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));

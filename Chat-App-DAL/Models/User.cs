@@ -8,7 +8,7 @@ namespace Chat_App_DAL.Models
     {
         [Key]
         [Column("user_id")]
-        public Guid UserId { get; private set; }
+        public int UserId { get; set; }
 
         [Required]
         [Column("username")]
@@ -24,11 +24,5 @@ namespace Chat_App_DAL.Models
         [Column("last_name")]
         public string LastName { get; set; }
     }
-
-
-
-
-
-
 
 }

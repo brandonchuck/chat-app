@@ -20,7 +20,6 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="JWT" Version="8.9.0" />
-    <PackageReference Include="RestSharp" Version="107.3.0" />
   </ItemGroup>
 
   <ItemGroup>

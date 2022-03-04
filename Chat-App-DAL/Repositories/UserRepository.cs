@@ -32,7 +32,7 @@ namespace Chat_App_DAL.Repositories
         }
 
         // Get User by user_id
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             return await _chatAppDbContext.Users.FirstAsync(user => user.UserId == id);
         }

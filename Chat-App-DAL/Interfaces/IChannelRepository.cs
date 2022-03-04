@@ -11,6 +11,7 @@ namespace Chat_App_DAL.Interfaces
     {
         public Task<Channel> CreateChannel(Channel channel);
         public Task<bool> ValidateChannel(Channel newChannel);
+        public Task<List<Message>> GetMessagesByChannelName(string channelName);
 
     }
 }

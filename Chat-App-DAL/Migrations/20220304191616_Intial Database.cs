@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Chat_App_DAL.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class IntialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,8 @@ namespace Chat_App_DAL.Migrations
                 name: "Channels",
                 columns: table => new
                 {
-                    channel_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    channel_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     channel_name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +26,8 @@ namespace Chat_App_DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     username = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
@@ -40,10 +42,11 @@ namespace Chat_App_DAL.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    message_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    message_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     text = table.Column<string>(type: "text", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    channel_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    channel_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

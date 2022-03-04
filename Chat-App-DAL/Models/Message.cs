@@ -7,15 +7,21 @@ namespace Chat_App_DAL.Models
 {
     public class Message
     {
+        //public Message(int userId, string text, int channelId)
+        //{
+        //    Text = text;
+        //    User.UserId = userId;
+        //    Channel.ChannelId = channelId;
+        //}
+
         [Key]
         [Column("message_id")]
-        public Guid MessageId { get; set; }
+        public int MessageId { get; set; }
 
         [Required]
         [Column("text")]
         public string Text { get; set; }
 
-        // think of this as "I am grabbing the user_id from the User model and specifiying the relationship here"
         [ForeignKey("user_id")] // this FK is dependent on the User table UserId property
         public User User { get; set; }
 

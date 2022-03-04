@@ -10,10 +10,8 @@ namespace Chat_App_DAL.Interfaces
     public interface IUserRepository
     {
         Task<User> CreateNewUserAsync(User user);
-        Task<User> GetUserByIdAsync(Guid id);
-
+        Task<User> GetUserByIdAsync(int id);
         Task<User> GetUserByUsernameAsync(string name);
-
         Task<List<User>> GetAllUsersAsync();
     }
 }

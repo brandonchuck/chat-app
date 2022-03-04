@@ -1,5 +1,6 @@
 ﻿using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +21,32 @@ namespace Chat_App_DAL.Repositories
         public async Task<Channel> CreateChannel(Channel newChannel)
         {
             // check if channel exists already
-            //Channel channel = _chatAppDbContext.Channels.First(channel => channel.ChannelName == newChannel.ChannelName);
             _chatAppDbContext.Channels.Add(newChannel); // add new channel; for seeding database
             await _chatAppDbContext.SaveChangesAsync(); // save changes
             return newChannel; // return created channel for testing
-
         }
 
         public async Task<bool> ValidateChannel(Channel newChannel)
         {
-            Channel channel = _chatAppDbContext.Channels.FirstOrDefault(c => c.ChannelName == newChannel.ChannelName);
+            Channel channel = await _chatAppDbContext.Channels.FirstOrDefaultAsync(c => c.ChannelName == newChannel.ChannelName);
             if(channel != null)
             {
                 return false;
             }
             return true;
+        }
+
+        public async Task<List<Message>> GetMessagesByChannelName(string channelName)
+        {
+            List<Message> channelMessages = await
+                (
+                    from message in _chatAppDbContext.Messages
+                    join channel in _chatAppDbContext.Channels on message.Channel.ChannelId equals channel.ChannelId
+                    where channel.ChannelName == channelName
+                    select message
+                ).ToListAsync();
+
+            return channelMessages;
         }
     }
 }

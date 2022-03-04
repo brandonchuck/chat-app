@@ -15,7 +15,7 @@ namespace chat_app.Controllers
         }
 
         [HttpPost("new-channel")]
-        public async Task<ActionResult<Channel>> CreateNewChannel([FromBody] Channel channel)
+        public async Task<ActionResult<Channel>> CreateNewChannelAsync([FromBody] Channel channel)
         {
             bool isValidChannel = await _channelRepository.ValidateChannel(channel);
 
@@ -29,11 +29,12 @@ namespace chat_app.Controllers
         }
 
 
-        // get messages from every user in a chatroom
-        [HttpGet("messages")]
-        public void GetChatroomMessages(string token)
+        // get messages from every user in a channel
+        [HttpGet("{channelName}/messages")]
+        public async Task<ActionResult<List<Message>>> GetChannelMessagesAsync([FromRoute] string channelName)
         {
-
+            List<Message> channelMessages = await _channelRepository.GetMessagesByChannelName(channelName);
+            return Ok(channelMessages);
         }
 
     }
