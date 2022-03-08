@@ -43,8 +43,8 @@ namespace chat_app.Services
             // define claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("Id", user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username)
             };
 
             // create JWT
@@ -54,7 +54,7 @@ namespace chat_app.Services
                 issuer: null,
                 audience: null,
                 claims,
-                expires: DateTime.Now.AddHours(24), // token expires after 24 hours
+                expires: DateTime.UtcNow.AddHours(24), // token expires after 24 hours
                 signingCredentials: credentials
             );
 

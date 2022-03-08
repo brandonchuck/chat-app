@@ -3,8 +3,12 @@ using chat_app.Services;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Chat_App_DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +31,19 @@ builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
 
 // Services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+// Authentication Services
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT").GetSection("Secret").Value))
+        };
+    });
 
 builder.Services.AddMvc();
 
@@ -55,7 +72,6 @@ app.UseSpaStaticFiles();
 
 app.UseRouting();
 
-// enable resources to accept JWT
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

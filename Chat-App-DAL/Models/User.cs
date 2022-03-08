@@ -23,6 +23,9 @@ namespace Chat_App_DAL.Models
 
         [Column("last_name")]
         public string LastName { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } 
     }
 
 }

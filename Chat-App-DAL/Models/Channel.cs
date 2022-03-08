@@ -17,5 +17,8 @@ namespace Chat_App_DAL.Models
         [Required]
         [Column("channel_name")]
         public string ChannelName { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }
