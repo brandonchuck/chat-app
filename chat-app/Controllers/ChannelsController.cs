@@ -40,9 +40,9 @@ namespace chat_app.Controllers
 
         // get messages from every user in a channel
         [HttpGet("{channelName}/messages")]
-        public async Task<ActionResult<List<Message>>> GetChannelMessagesAsync([FromRoute] string channelName)
+        public async Task<ActionResult<List<MessageDTO>>> GetChannelMessagesAsync([FromRoute] string channelName)
         {
-            List<Message> channelMessages = await _channelRepository.GetMessagesByChannelName(channelName);
+            List<MessageDTO> channelMessages = await _channelRepository.GetMessagesByChannelName(channelName);
             return Ok(channelMessages);
         }
 

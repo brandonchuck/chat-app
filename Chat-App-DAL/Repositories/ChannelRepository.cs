@@ -1,4 +1,5 @@
-﻿using Chat_App_DAL.Interfaces;
+﻿using Chat_App_DAL.DTOs;
+using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,17 +38,28 @@ namespace Chat_App_DAL.Repositories
             return true;
         }
 
-        public async Task<List<Message>> GetMessagesByChannelName(string channelName)
+        public async Task<List<MessageDTO>> GetMessagesByChannelName(string channelName)
         {
-            List<Message> channelMessages = await
+            List<MessageDTO> channelMessages = await
                 (
                     from message in _chatAppDbContext.Messages
                     join channel in _chatAppDbContext.Channels on message.Channel.ChannelId equals channel.ChannelId
                     where channel.ChannelName == channelName
-                    select message
+                    select new MessageDTO
+                    {
+                        Text = message.Text
+                    } 
                 ).ToListAsync();
 
             return channelMessages;
         }
+    
+        public async Task<int> GetChannelIdByChannelName(string channelName)
+        {
+            Channel channel = await _chatAppDbContext.Channels.FirstOrDefaultAsync(c => c.ChannelName == channelName);
+            return channel.ChannelId;
+        }
     }
+
+
 }

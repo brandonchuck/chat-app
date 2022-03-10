@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Chat_App_DAL.Models
 {
-    // C# class to define the users table
     public class User
     {
         [Key]

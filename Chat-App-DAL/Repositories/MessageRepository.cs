@@ -25,26 +25,20 @@ namespace Chat_App_DAL.Repositories
             return await _chatAppDbContext.Messages.Where(m => m.User.UserId == user_id).ToListAsync();
         }
 
-        public async Task<Message> CreateChannelMessageAsync(string text, int userId, string channelName)
+        public async Task CreateChannelMessageAsync(string text, int userId, string channelName)
         {
-            // Message can belong to only 1 Channel
-            // Channel can have many Messages
+            Channel channel = await _chatAppDbContext.Channels.FirstOrDefaultAsync(c => c.ChannelName == channelName);
+            int channelId = channel.ChannelId;
 
-            int channelId = _chatAppDbContext.Channels.First(c => c.ChannelName == channelName).ChannelId;
-
-
-            // *** Trying to create new Message object and save to database
-            // *** Trying to pass text, user_id (from jwt) and channel_name (from Route) to create Message object
             Message newMessage = new Message
             {
                 Text = text,
-                // User.UserId = userId;
-                // Channel.ChannelId = channelId;
+                user_id = userId,
+                channel_id = channelId,
             };
 
-            _chatAppDbContext.Add(newMessage);
+            _chatAppDbContext.Messages.Add(newMessage);
             await _chatAppDbContext.SaveChangesAsync();
-            return newMessage;
         }
     }
 }

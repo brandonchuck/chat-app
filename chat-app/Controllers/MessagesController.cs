@@ -50,11 +50,14 @@ namespace chat_app.Controllers
                 var userId = jwtSecurityToken.Claims.Where(c => c.Type == "Id")
                     .Select(c => c.Value).FirstOrDefault();
 
-                // passing user_id from JWT, channelName from route, and text from MessageDTO
-                //_messageRepository.CreateChannelMessageAsync(channelName, userId, messageDTO.Text);
+                // pass user_id from JWT, channelName from route, and text from MessageDTO
+                if (userId != null)
+                {
+                    await _messageRepository.CreateChannelMessageAsync(messageDTO.Text, int.Parse(userId), channelName);                
+                }
             }
 
-            return Ok("test");
+            return Ok("Message created!");
         }
     }
 }

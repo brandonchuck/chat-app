@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Chat_App_DAL.Migrations
 {
     [DbContext(typeof(ChatAppDbContext))]
-    [Migration("20220304212205_InitialDatabase")]
+    [Migration("20220310045817_InitialDatabase")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,12 @@ namespace Chat_App_DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("channel_name");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
                     b.HasKey("ChannelId");
 
                     b.ToTable("Channels");
@@ -51,6 +57,12 @@ namespace Chat_App_DAL.Migrations
                         .HasColumnName("message_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MessageId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("Text")
                         .IsRequired()

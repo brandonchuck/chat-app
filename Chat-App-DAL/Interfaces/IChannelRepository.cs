@@ -1,4 +1,5 @@
-﻿using Chat_App_DAL.Models;
+﻿using Chat_App_DAL.DTOs;
+using Chat_App_DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Chat_App_DAL.Interfaces
     {
         public Task<Channel> CreateChannel(Channel channel);
         public Task<bool> ValidateChannel(Channel newChannel);
-        public Task<List<Message>> GetMessagesByChannelName(string channelName);
-
+        public Task<List<MessageDTO>> GetMessagesByChannelName(string channelName);
+        public Task<int> GetChannelIdByChannelName(string channelName);
     }
 }

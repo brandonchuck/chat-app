@@ -16,7 +16,8 @@ namespace Chat_App_DAL.Migrations
                 {
                     channel_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    channel_name = table.Column<string>(type: "text", nullable: false)
+                    channel_name = table.Column<string>(type: "text", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -48,7 +49,8 @@ namespace Chat_App_DAL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     text = table.Column<string>(type: "text", nullable: false),
                     user_id = table.Column<int>(type: "integer", nullable: false),
-                    channel_id = table.Column<int>(type: "integer", nullable: false)
+                    channel_id = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
