@@ -9,7 +9,7 @@ namespace chat_app.Controllers
 {
     [Route("api/channel")]
     [ApiController]
-    [Authorize]
+    [Authorize] // only allow access to authenticated users
     public class ChannelsController : ControllerBase
     {
         private readonly IChannelRepository _channelRepository;

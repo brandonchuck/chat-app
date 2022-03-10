@@ -9,6 +9,5 @@ namespace Chat_App_DAL.DTOs
     public class MessageDTO
     {
         public string Text { get; set; }
-        public int UserId { get; set; }
     }
 }

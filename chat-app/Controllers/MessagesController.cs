@@ -1,12 +1,17 @@
 ﻿using Chat_App_DAL.DTOs;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 
 namespace chat_app.Controllers
 {
     [Route("api/messages")]
     [ApiController]
+    [Authorize]
     public class MessagesController : ControllerBase
     {
         IMessageRepository _messageRepository;
@@ -24,11 +29,32 @@ namespace chat_app.Controllers
         }
 
         [HttpPost("{channelName}/create")]
-        public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromHeader] int userId, [FromBody] MessageDTO messageDTO)
+        public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromBody] MessageDTO messageDTO)
         {
+            // get token from Authorization header
+            var authHeader = Request.Headers[HeaderNames.Authorization];
 
-            var message = await _messageRepository.CreateChannelMessageAsync(channelName, userId, messageDTO.Text);
-            return Ok(message);
+            if (String.IsNullOrEmpty(authHeader))
+            {
+                return Unauthorized("You must be authenticated");
+            }
+
+            if (AuthenticationHeaderValue.TryParse(authHeader, out var headerValue))
+            {
+                var scheme = headerValue.Scheme; // "Bearer" prefix
+                var jwt = headerValue.Parameter; // token
+
+                // get userId from token payload
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = tokenHandler.ReadJwtToken(jwt);
+                var userId = jwtSecurityToken.Claims.Where(c => c.Type == "Id")
+                    .Select(c => c.Value).FirstOrDefault();
+
+                // passing user_id from JWT, channelName from route, and text from MessageDTO
+                //_messageRepository.CreateChannelMessageAsync(channelName, userId, messageDTO.Text);
+            }
+
+            return Ok("test");
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Chat_App_DAL.Repositories
             _chatAppDbContext = chatAppDbContext;
         }
 
+
         public async Task<Channel> CreateChannel(Channel newChannel)
         {
             // check if channel exists already

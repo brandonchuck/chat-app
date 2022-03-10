@@ -44,7 +44,8 @@ namespace chat_app.Services
             var claims = new List<Claim>
             {
                 new Claim("Id", user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim("timestamp", user.CreatedAt.ToString())
             };
 
             // create JWT
