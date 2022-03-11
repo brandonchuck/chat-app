@@ -18,7 +18,8 @@ namespace chat_app.Controllers
             _channelRepository = channelRepository;
         }
 
-        [HttpPost("new-channel")]
+        // Create new channel
+        [HttpPost("create")]
         public async Task<ActionResult<Channel>> CreateNewChannelAsync([FromBody] ChannelDTO channelDTO)
         {
             Channel channel = new Channel
@@ -37,8 +38,8 @@ namespace chat_app.Controllers
             return Ok(newChannel);
         }
 
-
-        // get messages from every user in a channel
+       
+        // Get messages from every user in a channel
         [HttpGet("{channelName}/messages")]
         public async Task<ActionResult<List<MessageDTO>>> GetChannelMessagesAsync([FromRoute] string channelName)
         {

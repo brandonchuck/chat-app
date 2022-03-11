@@ -24,6 +24,7 @@ namespace chat_app.Controllers
             _authenticationService = authenticationService;
         }
 
+        // Log in user
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login([FromBody] LoginDTO loginDTO)
         {
@@ -46,7 +47,7 @@ namespace chat_app.Controllers
             return Ok(new { token = jwtToken });
         }
 
-
+        // Sign up new user
         [HttpPost("signup")]
         public async Task<User> Signup([FromBody] SignupDTO signupDTO)
         {

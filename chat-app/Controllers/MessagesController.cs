@@ -21,6 +21,7 @@ namespace chat_app.Controllers
             _messageRepository = messageRepository;
         }
 
+        // Get Messages by Id -- not used yet
         [HttpGet("{userId}")]
         public async Task<ActionResult<List<Message>>> GetUserMessagesByIdAsync([FromRoute] int userId)
         {
@@ -28,6 +29,8 @@ namespace chat_app.Controllers
             return Ok(userMessages);
         }
 
+
+        // Create new message in channel
         [HttpPost("{channelName}/create")]
         public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromBody] MessageDTO messageDTO)
         {
@@ -51,10 +54,12 @@ namespace chat_app.Controllers
                     .Select(c => c.Value).FirstOrDefault();
 
                 // pass user_id from JWT, channelName from route, and text from MessageDTO
-                if (userId != null)
+                if (userId == null)
                 {
-                    await _messageRepository.CreateChannelMessageAsync(messageDTO.Text, int.Parse(userId), channelName);                
+                    return NotFound("User not found");
                 }
+                
+                await _messageRepository.CreateChannelMessageAsync(messageDTO.Text, int.Parse(userId), channelName);                
             }
 
             return Ok("Message created!");

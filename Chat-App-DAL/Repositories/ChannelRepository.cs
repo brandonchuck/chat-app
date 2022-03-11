@@ -2,11 +2,6 @@
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat_App_DAL.Repositories
 {
@@ -44,10 +39,13 @@ namespace Chat_App_DAL.Repositories
                 (
                     from message in _chatAppDbContext.Messages
                     join channel in _chatAppDbContext.Channels on message.Channel.ChannelId equals channel.ChannelId
+                    join user in _chatAppDbContext.Users on message.User.UserId equals user.UserId
                     where channel.ChannelName == channelName
                     select new MessageDTO
                     {
-                        Text = message.Text
+                        Text = message.Text,
+                        Username = user.Username,
+                        CreatedAt = message.CreatedAt
                     } 
                 ).ToListAsync();
 

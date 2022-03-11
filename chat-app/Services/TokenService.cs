@@ -9,7 +9,6 @@
         // method for validating token
         public bool ValidateToken(string token)
         {
-            
             return true;
         }
 
