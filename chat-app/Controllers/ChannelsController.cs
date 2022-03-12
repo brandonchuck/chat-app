@@ -1,7 +1,6 @@
 ﻿using Chat_App_DAL.DTOs;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

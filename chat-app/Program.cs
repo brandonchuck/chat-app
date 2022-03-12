@@ -79,15 +79,15 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-//app.UseSpa(spa =>
-//{
-//    spa.Options.SourcePath = "chat-app-frontend";
-//    if (app.Environment.IsDevelopment())
-//    {
-//        app.UseDeveloperExceptionPage();
-//        spa.UseReactDevelopmentServer(npmScript: "start");
-//    }
-//});
+app.UseSpa(spa =>
+{
+    spa.Options.SourcePath = "chat-app-frontend";
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        spa.UseReactDevelopmentServer(npmScript: "start");
+    }
+});
 
 app.Run();
 

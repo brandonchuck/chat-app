@@ -2,12 +2,6 @@
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Web.Services3.Referral;
 
 namespace chat_app.Controllers
 {
@@ -49,7 +43,7 @@ namespace chat_app.Controllers
 
         // Sign up new user
         [HttpPost("signup")]
-        public async Task<User> Signup([FromBody] SignupDTO signupDTO)
+        public async Task<ActionResult<string>> Signup([FromBody] SignupDTO signupDTO)
         {
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(signupDTO.Password); // this hash contains the salt
             signupDTO.Password = passwordHash;
@@ -63,8 +57,8 @@ namespace chat_app.Controllers
                 LastName = signupDTO.LastName,
             };
 
-            var newUser = await _userRepository.CreateNewUserAsync(user);
-            return newUser;
+            await _userRepository.CreateNewUserAsync(user);
+            return Ok("Registration successful!");
         }
 
     }
