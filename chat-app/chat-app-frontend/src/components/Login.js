@@ -1,71 +1,47 @@
-import { React, useState, useRef, Form } from "react";
+import React from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-// import { BrowserRouter as Router, Routes, Routem useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  // UPDATE TO USE useRef() hook!
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
+  const { register, handleSubmit, reset } = useForm();
 
-  const username = useRef("");
-  const password = useRef("");
-  // initiate useHistory() hook here
+  const onSubmit = async (loginData) => {
+    await axios.post("api/auth/login", loginData).then((res) => {
+      localStorage.setItem("token", res.data.token); // store jwt in localStorage
+    });
 
-  const loginData = {
-    username: username,
-    password: password,
+    console.dir(onSubmit);
   };
 
-  // send username & password to /login
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    try {
-      await axios
-        .post("/login", loginData)
-        .then((res) => {
-          // TODO: save jwt_token here to session storage for accessing other endpoints
-        })
-        .catch((err) => {
-          console.log(err.Message);
-        });
-    } catch (err) {
-      console.log(err.Message);
-    }
-
-    //TODO: redirect user to /chatroom endpoint here after login using history
-  };
+  //TODO: redirect user to /chatroom endpoint here after login using history
 
   return (
-    <>
-      <Form type="submit">
-        <label htmlfFor="userName">Username:</label>
+    <div>
+      <form type="submit" onSubmit={handleSubmit(onSubmit)}>
+        <label htmlFor="username">Username:</label>
         <input
           type="text"
-          id="userName"
-          ref={username}
-          // value={username}
-          // onChange={(e) => setUsername(e.target.value)}
+          name="username"
+          placeholder="Username"
+          {...register("username", { required: true })}
         />
 
-        <label htmlfFor="password">Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
-          id="password"
-          ref={password}
-          // value={password}
-          // onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          placeholder="Password"
+          {...register("password", { required: true })}
         />
-        <button type="submit" onClick={(e) => handleLogin(e)}>
+        <button type="submit" onClick={() => reset()}>
           Login
         </button>
-      </Form>
-      {/* make this have a pop-up modal for signing up */}
+      </form>
+
       <h3>
-        Don't have an acount? <Link href="/signup">Signup</Link>
+        Don't have an acount? <a href="/signup">Signup</a>
       </h3>
-    </>
+    </div>
   );
 };
 

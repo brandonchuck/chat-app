@@ -13,6 +13,21 @@ namespace Chat_App_DAL.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseIdentityColumns();
+
+            //specifications for CreatedAt in User table
+            modelBuilder.Entity<User>()
+               .Property(u => u.CreatedAt)
+               .HasDefaultValueSql("now()");
+
+            //specifications for CreatedAt in User table
+            modelBuilder.Entity<Channel>()
+               .Property(u => u.CreatedAt)
+               .HasDefaultValueSql("now()");
+
+            //specifications for CreatedAt in User table
+            modelBuilder.Entity<Message>()
+               .Property(u => u.CreatedAt)
+               .HasDefaultValueSql("now()");
         }
 
         // Turning model classes into a set of model objects aka allowing there to be rows

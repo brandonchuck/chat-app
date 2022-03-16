@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat_App_DAL.Models
 {
-    //public class Message
-    //{
-    //    [Key]
-    //    [Column("message_id")]
-    //    public Guid MessageId { get; set; }
+    public class Message
+    {
+        [Key]
+        [Column("message_id")]
+        public int MessageId { get; set; }
 
-    //    [ForeignKey("User")] // this FK is dependent on the User table UserId property
-    //    public Guid UserId { get; set; }
+        [Required]
+        [Column("text")]
+        public string Text { get; set; }
 
-    //    [Column("channel_id")]
-    //    [ForeignKey("Channel")] // this FK is dependent on the User table UserId property
-    //    public Guid ChannelId { get; set; }
-    //}
+        [ForeignKey("user_id")]
+        public User User { get; set; } // establishes 1-to-many relationship w/ User
+        public int user_id { get; set; }
+
+        [ForeignKey("channel_id")]
+        public Channel Channel { get; set; } // establishes 1-to-many relationship w/ Channel
+        public int channel_id { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+    }
 }

@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace Chat_App_DAL.Models
 {
-    //public class Channel
-    //{
-    //    [Key]
-    //    [Column("channel_id")]
-    //    public Guid ChannelId { get; set; }
+    public class Channel
+    {
+        [Key]
+        [Column("channel_id")]
+        public int ChannelId { get; set; }
 
-    //    [Column("channel_name")]
-    //    public string ChannelName { get; set; }
-    //}
+        [Required]
+        [Column("channel_name")]
+        public string ChannelName { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+    }
 }

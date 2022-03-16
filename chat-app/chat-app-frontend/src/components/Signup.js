@@ -1,107 +1,82 @@
-import { React, useState, useRef, Form } from "react";
 import axios from "axios";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 // accept firstname, lastname, username, password
 const Signup = () => {
   const PASS_LENGTH = 8;
-  // UPDATE TO USE useRef() hook!
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [passwordMatch, setPasswordMatch] = useState("");
 
-  const firstName = useRef("");
-  const lastName = useRef("");
-  const username = useRef("");
-  const password = useRef("");
-  const passwordMatch = useRef("");
+  const { register, handleSubmit, reset } = useForm();
 
-  const signupData = {
-    firstName: firstName,
-    lastName: lastName,
-    username: username,
-    password: password, // bcrypt password in backend before INSERT
-  };
+  const onSubmit = async (signupData) => {
+    // signupData is the data extracted from each form input
 
-  // makes POST request to /login endpoint
-  const handleRegister = async (e) => {
-    e.preventDefault();
-
-    if (password < PASS_LENGTH) {
-      alert(`password must be greater than ${PASS_LENGTH}`);
-      password.focus();
+    // Validate password length
+    if (signupData.password.length < PASS_LENGTH) {
+      alert(`password must be greater than ${PASS_LENGTH} characters`);
     }
 
-    // passwords must match
-    if (password !== passwordMatch) {
+    // Confirm password
+    if (signupData.password !== signupData.passwordMatch) {
       alert("passwords must match!");
-      passwordMatch.focus();
       // TODO: put focus back on the second password input
     }
 
-    // post data to /signup
-    await axios.post("api/signup", signupData);
+    // send user info to /singup
+    await axios
+      .post("api/auth/signup", signupData)
+      .then((res) => console.log(res.data)); // this should print "Registration successful!"
 
-    // TODO: close modal after signing up. This should just return user to the /login screen they were already on!
+    console.log(signupData);
+    // console.dir(onSubmit);
   };
 
-  // TODO: render this HTML in side of the modal
   return (
-    <Form type="submit">
-      <label htmlfFor="firstName">First Name:</label>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label htmlFor="firstName">First Name:</label>
       <input
         type="text"
-        id="firstName"
-        // value={firstName}
-        ref={firstName}
-        // onChange={(e) => setFirstName(e.target.value)}
+        name="firstName"
+        placeholder="First Name"
+        {...register("firstName", { required: true })}
       />
 
-      <label htmlfFor="lastName">Last Name:</label>
+      <label htmlFor="lastName">Last Name:</label>
       <input
         type="text"
-        id="lastName"
-        // value={lastName}
-        ref={lastName}
-        // onChange={(e) => setLastName(e.target.value)}
+        name="lastName"
+        placeholder="Last Name"
+        {...register("lastName", { required: true })}
       />
 
-      <label htmlfFor="userName">Username:</label>
+      <label htmlFor="userName">Username:</label>
       <input
         type="text"
-        id="userName"
-        // value={username}
-        ref={username}
-        // onChange={(e) => setUsername(e.target.value)}
+        name="username"
+        placeholder="Username"
+        {...register("username", { required: true })}
       />
 
-      <label htmlfFor="password">Password:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
-        id="password"
-        // value={password}
-        ref={password}
-        // onChange={(e) => setPassword(e.target.value)}
+        name="password"
+        placeholder="Password"
+        {...register("password", { required: true })}
       />
 
-      <label htmlfFor="password-match">Re-enter Password:</label>
+      <label htmlFor="password-match">Confirm Password:</label>
       <input
         type="password"
-        id="password-match"
-        // value={passwordMatch}
-        ref={passwordMatch}
-        // onChange={(e) => setPasswordMatch(e.target.value)}
+        name="passwordMatch"
+        placeholder="Confirm Password"
+        {...register("passwordMatch", { required: true })}
       />
 
-      <button
-        type="submit"
-        onClick={(e) => handleRegister(e)}
-        disabled={password != passwordMatch}
-      >
+      <button type="submit" onClick={() => reset()}>
         Register
       </button>
-    </Form>
+    </form>
   );
 };
 
