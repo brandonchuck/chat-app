@@ -32,7 +32,7 @@ namespace chat_app.Controllers
 
         // Create new message in channel
         [HttpPost("{channelName}/create")]
-        public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromBody] MessageDTO messageDTO)
+        public async Task<ActionResult<string>> CreateMessage([FromRoute] string channelName, [FromBody] NewMessageDTO newMessageDTO)
         {
             // get token from Authorization header
             var authHeader = Request.Headers[HeaderNames.Authorization];
@@ -59,7 +59,7 @@ namespace chat_app.Controllers
                     return NotFound("User not found");
                 }
                 
-                await _messageRepository.CreateChannelMessageAsync(messageDTO.Text, int.Parse(userId), channelName);                
+                await _messageRepository.CreateChannelMessageAsync(newMessageDTO.Text, int.Parse(userId), channelName);                
             }
 
             return Ok("Message created!");

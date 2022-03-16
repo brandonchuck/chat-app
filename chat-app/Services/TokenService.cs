@@ -3,7 +3,7 @@
     public class TokenService
     {
 
-        // need method for decoding the token and returning the JwtSecurityToken
+        // create method for decoding the token and returning the JwtSecurityToken
         // need to access claims from the returned token
     }
 }
