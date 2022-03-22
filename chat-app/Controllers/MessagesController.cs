@@ -1,6 +1,7 @@
 ﻿using Chat_App_DAL.DTOs;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -36,6 +37,7 @@ namespace chat_app.Controllers
         {
             // get token from Authorization header
             var authHeader = Request.Headers[HeaderNames.Authorization];
+            var authToken = HttpContext.GetTokenAsync("token"); // this will grab the token from AuthenticationProperties
 
             if (String.IsNullOrEmpty(authHeader))
             {

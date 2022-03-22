@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 const Signup = () => {
   const PASS_LENGTH = 8;
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (signupData) => {
     // signupData is the data extracted from each form input
@@ -73,9 +73,11 @@ const Signup = () => {
         {...register("passwordMatch", { required: true })}
       />
 
-      <button type="submit" onClick={() => reset()}>
-        Register
-      </button>
+      <button type="submit">Register</button>
+
+      <h3>
+        Already have an accoutn? <a href="/login">Login</a>
+      </h3>
     </form>
   );
 };

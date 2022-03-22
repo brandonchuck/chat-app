@@ -10,9 +10,11 @@ namespace Chat_App_DAL.Interfaces
 {
     public interface IChannelRepository
     {
-        public Task<Channel> CreateChannel(Channel channel);
-        public Task<bool> ValidateChannel(Channel newChannel);
-        public Task<List<MessageDTO>> GetMessagesByChannelName(string channelName);
-        public Task<int> GetChannelIdByChannelName(string channelName);
+        public Task<Channel> CreateChannelAsync(Channel channel);
+        public Task<bool> ValidateChannelAsync(Channel newChannel);
+        public Task<List<MessageDTO>> GetMessagesByChannelNameAsync(string channelName);
+        public Task<int> GetChannelIdByChannelNameAsync(string channelName);
+        public Task<List<ChannelDTO>> GetChannelsAsync();
+
     }
 }

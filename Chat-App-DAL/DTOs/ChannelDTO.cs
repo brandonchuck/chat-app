@@ -8,6 +8,7 @@ namespace Chat_App_DAL.DTOs
 {
     public class ChannelDTO
     {
+
         public string ChannelName { get; set; }
     }
 }

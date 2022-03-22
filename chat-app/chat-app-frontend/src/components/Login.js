@@ -1,16 +1,17 @@
 import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
+  let navigate = useNavigate();
 
   const onSubmit = async (loginData) => {
     await axios.post("api/auth/login", loginData).then((res) => {
       localStorage.setItem("token", res.data.token); // store jwt in localStorage
     });
-
-    console.dir(onSubmit);
+    navigate("/chat");
   };
 
   //TODO: redirect user to /chatroom endpoint here after login using history
@@ -33,9 +34,7 @@ const Login = () => {
           placeholder="Password"
           {...register("password", { required: true })}
         />
-        <button type="submit" onClick={() => reset()}>
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
 
       <h3>

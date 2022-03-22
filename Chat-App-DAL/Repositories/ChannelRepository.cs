@@ -15,7 +15,7 @@ namespace Chat_App_DAL.Repositories
         }
 
 
-        public async Task<Channel> CreateChannel(Channel newChannel)
+        public async Task<Channel> CreateChannelAsync(Channel newChannel)
         {
             // check if channel exists already
             _chatAppDbContext.Channels.Add(newChannel); // add new channel; for seeding database
@@ -23,7 +23,7 @@ namespace Chat_App_DAL.Repositories
             return newChannel; // return created channel for testing
         }
 
-        public async Task<bool> ValidateChannel(Channel newChannel)
+        public async Task<bool> ValidateChannelAsync(Channel newChannel)
         {
             Channel channel = await _chatAppDbContext.Channels.FirstOrDefaultAsync(c => c.ChannelName == newChannel.ChannelName);
             if(channel != null)
@@ -33,7 +33,7 @@ namespace Chat_App_DAL.Repositories
             return true;
         }
 
-        public async Task<List<MessageDTO>> GetMessagesByChannelName(string channelName)
+        public async Task<List<MessageDTO>> GetMessagesByChannelNameAsync(string channelName)
         {
             List<MessageDTO> channelMessages = await
                 (
@@ -52,10 +52,24 @@ namespace Chat_App_DAL.Repositories
             return channelMessages;
         }
     
-        public async Task<int> GetChannelIdByChannelName(string channelName)
+        public async Task<int> GetChannelIdByChannelNameAsync(string channelName)
         {
             Channel channel = await _chatAppDbContext.Channels.FirstOrDefaultAsync(c => c.ChannelName == channelName);
             return channel.ChannelId;
+        }
+
+        public async Task<List<ChannelDTO>> GetChannelsAsync()
+        {
+            List<ChannelDTO> channels = await 
+                (
+                    from channel in _chatAppDbContext.Channels
+                    select new ChannelDTO
+                    {
+                        ChannelName = channel.ChannelName,
+                    }
+                ).ToListAsync();
+
+            return channels;
         }
     }
 

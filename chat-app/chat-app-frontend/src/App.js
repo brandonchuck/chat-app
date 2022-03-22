@@ -1,19 +1,19 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-import Home from "./components/pages/Home";
+import Main from "./components/pages/Main";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div className="App">
         <div>
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<Signup />} />
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/chat" element={<Main />} />
+            {/* <Route exact path="*" element={<ErrorPage />} /> */}
           </Routes>
         </div>
       </div>
@@ -33,7 +33,7 @@ function App() {
           </ul>
         </div>
       </div> */}
-    </BrowserRouter>
+    </Router>
   );
 }
 
