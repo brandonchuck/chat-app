@@ -8,7 +8,7 @@ const ChannelBar = ({ channels, setChannelName }) => {
       {channels.map((channel, index) => {
         return (
           <button
-            style={{ color: "red", border: "solid" }}
+            className="bg-green-200 px-1 mx-1"
             key={index}
             onClick={(e) => {
               setChannelName(e.target.textContent); // click on channel name to display channel messages in ChatWindow

@@ -19,10 +19,11 @@ const Main = () => {
           })
           .then(({ data }) => {
             setChannels(data);
-          });
+          })
+          .catch((err) => console.log(err));
       }
     };
-    getChannels().catch((err) => console.log(err));
+    getChannels();
   }, []);
 
   // grab all messages from selected pre-selected channel
@@ -46,7 +47,9 @@ const Main = () => {
     <div>
       <div>
         <ChannelBar channels={channels} setChannelName={setChannelName} />
+        {/* <DirectMessagesBar /> */}
       </div>
+
       <div>
         <ChatWindow
           channelName={channelName}
@@ -54,7 +57,7 @@ const Main = () => {
           setChannelMessages={setChannelMessages}
         />
       </div>
-      <div>{/* <MessageBar/> */}</div>
+      <div>{/* <MessagingBar/> */}</div>
     </div>
   );
 };
