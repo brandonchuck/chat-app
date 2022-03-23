@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import ChannelBar from "../ChannelBar";
 import ChatWindow from "../ChatWindow";
+import MessageBar from "../MessageBar";
 
 const Main = () => {
   const [channels, setChannels] = useState([]); // for ChannelBar
@@ -40,7 +41,7 @@ const Main = () => {
       }
     };
     getChannelMessages();
-  }, [channelName]);
+  }, [channelName, channelMessages]);
 
   // return ChannelBar, ChatWindow, MessageBar
   return (
@@ -54,10 +55,15 @@ const Main = () => {
         <ChatWindow
           channelName={channelName}
           channelMessages={channelMessages}
-          setChannelMessages={setChannelMessages}
         />
       </div>
-      <div>{/* <MessagingBar/> */}</div>
+      <div>
+        <MessageBar
+          channelMessages={channelMessages}
+          setChannelMessages={setChannelMessages}
+          channelName={channelName}
+        />
+      </div>
     </div>
   );
 };

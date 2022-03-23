@@ -11,6 +11,7 @@ const ChannelBar = ({ channels, setChannelName }) => {
             className="bg-green-200 px-1 mx-1"
             key={index}
             onClick={(e) => {
+              // e.preventDefault();
               setChannelName(e.target.textContent); // click on channel name to display channel messages in ChatWindow
               // setActive(true);
             }}
