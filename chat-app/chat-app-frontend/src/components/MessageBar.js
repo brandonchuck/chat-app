@@ -6,23 +6,26 @@ const MessageBar = ({ channelName, channelMessages, setChannelMessages }) => {
 
   const message = { text: newMessage };
 
+  // create new message in current channel
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
 
     if (token !== null) {
-      setChannelMessages([...channelMessages, newMessage]);
       await axios.post(`api/messages/${channelName}/create`, message, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setChannelMessages([...channelMessages, newMessage]);
     }
   };
+
+  // console.log("MessageBar rendered");
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <input
-          placeholder="Message"
+          placeholder="Message..."
           type="text"
           onChange={(e) => setNewMessage(e.target.value)}
           value={newMessage}

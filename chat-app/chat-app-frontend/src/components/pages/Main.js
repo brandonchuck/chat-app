@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChannelBar from "../ChannelBar";
 import ChatWindow from "../ChatWindow";
@@ -9,45 +9,47 @@ const Main = () => {
   const [channelMessages, setChannelMessages] = useState([]); // For ChatWindow
   const [channelName, setChannelName] = useState("anime"); // for channelBar
 
-  // grab all channels on load
-  useEffect(() => {
-    const getChannels = async () => {
-      const token = localStorage.getItem("token");
-      if (token !== null) {
-        await axios
-          .get("api/channel/channels", {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then(({ data }) => {
-            setChannels(data);
-          })
-          .catch((err) => console.log(err));
-      }
-    };
-    getChannels();
-  }, []);
-
   // grab all messages from selected pre-selected channel
   useEffect(() => {
-    const getChannelMessages = async () => {
-      const token = localStorage.getItem("token");
-      if (token !== null) {
-        await axios
-          .get(`api/channel/${channelName}/messages`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then(({ data }) => setChannelMessages(data))
-          .catch((err) => console.log(err));
-      }
-    };
+    getChannels();
     getChannelMessages();
-  }, [channelName, channelMessages]);
+  }, [channelName]); // how can I setChannelMessages without triggering a rerender every time
+
+  const getChannels = async () => {
+    const token = localStorage.getItem("token");
+    if (token !== null) {
+      const { data } = await axios
+        .get("api/channel/channels", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .catch((err) => console.log(err));
+      setChannels(data);
+    }
+    console.log("I rendered bc of setChannels 1");
+  };
+
+  // get all messages from current channel
+  const getChannelMessages = async () => {
+    const token = localStorage.getItem("token");
+    if (token !== null) {
+      const { data } = await axios
+        .get(`api/channel/${channelName}/messages`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .catch((err) => console.log(err));
+      setChannelMessages(data);
+    }
+  };
 
   // return ChannelBar, ChatWindow, MessageBar
   return (
     <div>
       <div>
-        <ChannelBar channels={channels} setChannelName={setChannelName} />
+        <ChannelBar
+          channels={channels}
+          setChannels={setChannels}
+          setChannelName={setChannelName}
+        />
         {/* <DirectMessagesBar /> */}
       </div>
 
