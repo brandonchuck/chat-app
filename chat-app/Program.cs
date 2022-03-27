@@ -45,7 +45,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddMvc();
 
 // for use in production
 builder.Services.AddSpaStaticFiles(configuration =>
