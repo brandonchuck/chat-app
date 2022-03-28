@@ -8,12 +8,25 @@ const Main = () => {
   const [channels, setChannels] = useState([]); // for ChannelBar
   const [channelMessages, setChannelMessages] = useState([]); // For ChatWindow
   const [channelName, setChannelName] = useState("anime"); // for channelBar
+  const [isNewMessage, setIsNewMessage] = useState(false);
 
   // grab all messages from selected pre-selected channel
   useEffect(() => {
     getChannels();
     getChannelMessages();
-  }, [channelName]); // how can I setChannelMessages without triggering a rerender every time
+  }, []);
+
+  useEffect(() => {
+    getChannels();
+
+    if (isNewMessage) {
+      getChannelMessages();
+    }
+  }, [isNewMessage]);
+
+  useEffect(() => {
+    getChannelMessages();
+  }, [channelName]);
 
   const getChannels = async () => {
     const token = localStorage.getItem("token");
@@ -61,6 +74,8 @@ const Main = () => {
       </div>
       <div>
         <MessageBar
+          isNewMessage={isNewMessage}
+          setIsNewMessage={setIsNewMessage}
           channelMessages={channelMessages}
           setChannelMessages={setChannelMessages}
           channelName={channelName}

@@ -1,7 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-const MessageBar = ({ channelName, channelMessages, setChannelMessages }) => {
+const MessageBar = ({
+  channelName,
+  channelMessages,
+  setChannelMessages,
+  isNewMessage,
+  setIsNewMessage,
+}) => {
   const [newMessage, setNewMessage] = useState("");
 
   const message = { text: newMessage };
@@ -16,10 +22,10 @@ const MessageBar = ({ channelName, channelMessages, setChannelMessages }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChannelMessages([...channelMessages, newMessage]);
+      setIsNewMessage(!isNewMessage);
     }
+    setIsNewMessage(!isNewMessage);
   };
-
-  // console.log("MessageBar rendered");
 
   return (
     <div>
