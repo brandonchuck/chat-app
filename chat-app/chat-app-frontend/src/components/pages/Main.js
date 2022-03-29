@@ -9,21 +9,29 @@ const Main = () => {
   const [channelMessages, setChannelMessages] = useState([]); // For ChatWindow
   const [channelName, setChannelName] = useState("anime"); // for channelBar
   const [isNewMessage, setIsNewMessage] = useState(false);
+  const [isNewChannel, setIsNewChannel] = useState(false);
 
-  // grab all messages from selected pre-selected channel
+  // grab all messages and channels
   useEffect(() => {
     getChannels();
     getChannelMessages();
   }, []);
 
+  // grab all new messages if new message is sent
   useEffect(() => {
-    getChannels();
-
     if (isNewMessage) {
       getChannelMessages();
     }
   }, [isNewMessage]);
 
+  // grab all channels is new channel is created
+  useEffect(() => {
+    if (isNewChannel) {
+      getChannels();
+    }
+  }, [isNewChannel]);
+
+  // grab all messages when switching to new channel
   useEffect(() => {
     getChannelMessages();
   }, [channelName]);
@@ -38,7 +46,7 @@ const Main = () => {
         .catch((err) => console.log(err));
       setChannels(data);
     }
-    console.log("I rendered bc of setChannels 1");
+    // console.log("I rendered bc of setChannels 1");
   };
 
   // get all messages from current channel
@@ -54,11 +62,12 @@ const Main = () => {
     }
   };
 
-  // return ChannelBar, ChatWindow, MessageBar
   return (
     <div>
       <div>
         <ChannelBar
+          isNewChannel={isNewChannel}
+          setIsNewChannel={setIsNewChannel}
           channels={channels}
           setChannels={setChannels}
           setChannelName={setChannelName}

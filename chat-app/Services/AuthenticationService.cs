@@ -51,7 +51,7 @@ namespace chat_app.Services
             // create JWT
             var authToken = new JwtSecurityToken(
                 //_configuration["JWT:Issuer"],  // issuer is the server 
-                //_configuration["JWT:Audience"], // audience is the browser
+                //_configuration["JWT:Audience"], // audience is the frontend
                 issuer: null,
                 audience: null,
                 claims,

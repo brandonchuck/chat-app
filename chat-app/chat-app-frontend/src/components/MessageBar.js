@@ -33,8 +33,8 @@ const MessageBar = ({
         <input
           placeholder="Message..."
           type="text"
-          onChange={(e) => setNewMessage(e.target.value)}
           value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
         />
         <button type="submit">Send</button>
       </form>
