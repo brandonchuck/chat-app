@@ -3,6 +3,7 @@ import axios from "axios";
 import ChannelBar from "../ChannelBar";
 import ChatWindow from "../ChatWindow";
 import MessageBar from "../MessageBar";
+import * as signalR from "@microsoft/signalr";
 
 const Main = () => {
   const [channels, setChannels] = useState([]); // for ChannelBar
@@ -11,10 +12,22 @@ const Main = () => {
   const [isNewMessage, setIsNewMessage] = useState(false);
   const [isNewChannel, setIsNewChannel] = useState(false);
 
+  const hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl("/chat")
+    .build();
+
+  hubConnection.start(); // start websocket
+
   // grab all messages and channels
   useEffect(() => {
-    getChannels();
+    getChannels(); // grab all channels on load
     getChannelMessages();
+
+    // const availableChannels = [...channels]; // get copy of channels
+    // if (availableChannels.length === 0) {
+    //   // setChannelName([availableChannels[0]]);
+    //   getChannelMessages();
+    // }
   }, []);
 
   // grab all new messages if new message is sent
@@ -24,7 +37,7 @@ const Main = () => {
     }
   }, [isNewMessage]);
 
-  // grab all channels is new channel is created
+  // grab all channels if new channel is created
   useEffect(() => {
     if (isNewChannel) {
       getChannels();
@@ -45,6 +58,9 @@ const Main = () => {
         })
         .catch((err) => console.log(err));
       setChannels(data);
+      // if (channels.length === 0) {
+      //   setChannelName(channels[0]);
+      // }
     }
     // console.log("I rendered bc of setChannels 1");
   };
@@ -53,6 +69,11 @@ const Main = () => {
   const getChannelMessages = async () => {
     const token = localStorage.getItem("token");
     if (token !== null) {
+      if (channels.length === 0) {
+        setChannelName(channels[0]);
+      }
+
+      // hubConnection.on("SendMessage", )
       const { data } = await axios
         .get(`api/channel/${channelName}/messages`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -83,11 +104,12 @@ const Main = () => {
       </div>
       <div>
         <MessageBar
-          isNewMessage={isNewMessage}
-          setIsNewMessage={setIsNewMessage}
+          channelName={channelName}
           channelMessages={channelMessages}
           setChannelMessages={setChannelMessages}
-          channelName={channelName}
+          isNewMessage={isNewMessage}
+          setIsNewMessage={setIsNewMessage}
+          hubConnection={hubConnection}
         />
       </div>
     </div>

@@ -1,4 +1,5 @@
 using chat_app.Controllers;
+using chat_app.Hubs;
 using chat_app.Services;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+//using SignalRChat.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR(); // use websockets
 
 // add DB context to services and configure it to use our connection string with Npgsql
 builder.Services.AddDbContext<ChatAppDbContext>(
@@ -65,7 +68,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.UseSpaStaticFiles();
 
 app.UseRouting();
@@ -73,6 +75,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHub<MessageHub>("/chat");
 
 app.UseEndpoints(endpoints =>
 {

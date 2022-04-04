@@ -1,12 +1,18 @@
 import axios from "axios";
 import React, { useState } from "react";
 
+// websocket data flow
+// 1. User POSTs newMessage to server
+// 2. The SendMessage event will be fired on server
+// 3. The SignalR Hub on client side is listening for the SendMessage event and will trigger a re-render inside of useEffect
+
 const MessageBar = ({
   channelName,
   channelMessages,
   setChannelMessages,
   isNewMessage,
   setIsNewMessage,
+  hubConnection,
 }) => {
   const [newMessage, setNewMessage] = useState("");
 
@@ -21,10 +27,17 @@ const MessageBar = ({
       await axios.post(`api/messages/${channelName}/create`, message, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setChannelMessages([...channelMessages, newMessage]);
-      setIsNewMessage(!isNewMessage);
+      // setChannelMessages([...channelMessages, newMessage]);
     }
-    setIsNewMessage(!isNewMessage);
+
+    // this is handling the UI
+    hubConnection.on("SendMessage", (message) => {
+      setChannelMessages([...channelMessages, message]);
+      setIsNewMessage(!isNewMessage); // set isNewMessage to true
+    });
+
+    setIsNewMessage(!isNewMessage); // reset isNewMessage to false
+    setNewMessage(""); // reset input field
   };
 
   return (

@@ -1,9 +1,11 @@
-﻿using Chat_App_DAL.DTOs;
+﻿using chat_app.Hubs;
+using Chat_App_DAL.DTOs;
 using Chat_App_DAL.Interfaces;
 using Chat_App_DAL.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -16,10 +18,12 @@ namespace chat_app.Controllers
     public class MessagesController : ControllerBase
     {
         IMessageRepository _messageRepository;
+        IHubContext<MessageHub> _messageHub;
 
-        public MessagesController(IMessageRepository messageRepository)
+        public MessagesController(IMessageRepository messageRepository, IHubContext<MessageHub> messageHub)
         {
             _messageRepository = messageRepository;
+            _messageHub = messageHub;
         }
 
         // Get Messages by Id -- not used yet
@@ -61,8 +65,12 @@ namespace chat_app.Controllers
                     return NotFound("User not found");
                 }
                 
-                await _messageRepository.CreateChannelMessageAsync(newMessageDTO.Text, int.Parse(userId), channelName);                
+                await _messageRepository.CreateChannelMessageAsync(newMessageDTO.Text, int.Parse(userId), channelName);
             }
+            
+
+            // send new message to all other clients connected to websocket
+            await _messageHub.Clients.All.SendAsync("SendMessage", newMessageDTO.Text);
 
             return Ok("Message created!");
         }

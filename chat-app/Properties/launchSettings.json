@@ -22,7 +22,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "swagger", // can change this to chat-app-frontend to not use swagger anymore 
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
